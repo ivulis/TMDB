@@ -14,20 +14,20 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp">
+        android:layout_marginVertical="@dimen/margin_small"
+        app:cardCornerRadius="@dimen/radius_medium"
+        app:cardElevation="@dimen/elevation_medium">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="@dimen/padding_large">
 
             <ImageView
                 android:id="@+id/movie_poster"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/poster_width"
+                android:layout_height="@dimen/poster_height"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{movie.poster}"
                 tools:src="@tools:sample/backgrounds/scenic" />
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/margin_large"
                 android:orientation="vertical">
 
                 <TextView
@@ -47,7 +47,7 @@
                     android:maxLines="2"
                     android:text="@{movie.title}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_size_large"
                     app:layout_constraintStart_toEndOf="@+id/movie_poster"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="The Lord of the Rings: The Fellowship of the Ring" />
@@ -63,17 +63,17 @@
                         android:layout_height="wrap_content"
                         android:text="@{movie.releaseDate}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="Jul 21, 2023" />
 
                     <TextView
                         android:id="@+id/movie_runtime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="@dimen/margin_medium"
                         android:text="@{movie.runtime}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_medium"
                         tools:text="1h 54m" />
                 </LinearLayout>
 
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{movie.rating}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_medium"
                     tools:text="7.2" />
             </LinearLayout>
         </LinearLayout>
