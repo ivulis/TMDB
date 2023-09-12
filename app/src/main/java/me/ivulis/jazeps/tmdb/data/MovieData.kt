@@ -74,6 +74,13 @@ object MovieData {
                 runtime = "165m",
                 rating = "7.778",
                 poster = "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg"
+            ),
+            Movie(
+                title = "Night of the Day of the Dawn of the Son of the Bride of the Return of the Revenge of the Terror of the Attack of the Evil, Mutant, Alien, Flesh Eating, Hellbound, Zombified Living Dead Part 2",
+                releaseDate = "1991-01-01",
+                runtime = "96m",
+                rating = "4.5",
+                poster = "https://image.tmdb.org/t/p/w500/31tmRWVLk1hEq3TLAH2Uq8XtkG2.jpg"
             )
         )
     }

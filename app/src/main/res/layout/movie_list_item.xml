@@ -28,16 +28,22 @@
                 android:id="@+id/movie_poster"
                 android:layout_width="@dimen/poster_width"
                 android:layout_height="@dimen/poster_height"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{movie.poster}"
+                app:layout_constraintStart_toStartOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/movie_info"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_large"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/add_to_watchlist_button"
+                app:layout_constraintStart_toEndOf="@+id/movie_poster">
 
                 <TextView
                     android:id="@+id/movie_title"
@@ -48,8 +54,6 @@
                     android:text="@{movie.title}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="@dimen/text_size_large"
-                    app:layout_constraintStart_toEndOf="@+id/movie_poster"
-                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="The Lord of the Rings: The Fellowship of the Ring" />
 
                 <LinearLayout
@@ -86,6 +90,16 @@
                     android:textSize="@dimen/text_size_medium"
                     tools:text="7.2" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/add_to_watchlist_button"
+                android:layout_width="@dimen/button_size_add_to_watchlist"
+                android:layout_height="@dimen/button_size_add_to_watchlist"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/add_to_watchlist_button"
+                android:src="@drawable/ic_add_to_watchlist"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
