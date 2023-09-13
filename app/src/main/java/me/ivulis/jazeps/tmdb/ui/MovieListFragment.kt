@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import me.ivulis.jazeps.tmdb.R
 import me.ivulis.jazeps.tmdb.databinding.FragmentMovieListBinding
 
 class MovieListFragment : Fragment() {
 
-    private val viewModel: MovieViewModel by viewModels()
+    private val viewModel: MovieViewModel by activityViewModels()
     // Binding object instance with access to the views in the fragment_movie_list.xml layout
     private lateinit var binding: FragmentMovieListBinding
 
@@ -19,12 +21,14 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        return super.onCreateView(inflater, container, savedInstanceState)
         val binding = FragmentMovieListBinding.inflate(inflater)
         viewModel.getMovieList()
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter()
+        binding.recyclerView.adapter = MovieListAdapter(MovieListener { movie ->
+            viewModel.onMovieClicked(movie)
+            findNavController().navigate(R.id.action_movieListFragment_to_movieDetailFragment)
+        })
         return binding.root
     }
 }

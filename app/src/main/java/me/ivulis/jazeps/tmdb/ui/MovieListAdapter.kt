@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import me.ivulis.jazeps.tmdb.databinding.MovieListItemBinding
 import me.ivulis.jazeps.tmdb.model.Movie
 
-class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(DiffCallback) {
+class MovieListAdapter(private val clickListener: MovieListener) :
+    ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(DiffCallback) {
 
     class MovieViewHolder(private var binding: MovieListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Movie) {
+        fun bind(clickListener: MovieListener, movie: Movie) {
             binding.movie = movie
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }
@@ -40,6 +42,10 @@ class MovieListAdapter : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(Di
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = getItem(position)
-        holder.bind(movie)
+        holder.bind(clickListener, movie)
     }
+}
+
+class MovieListener(val clickListener: (movie: Movie) -> Unit) {
+    fun onClick(movie: Movie) = clickListener(movie)
 }

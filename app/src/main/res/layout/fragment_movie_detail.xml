@@ -21,6 +21,7 @@
             android:padding="@dimen/padding_large">
 
             <TextView
+                android:id="@+id/movie_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.movie.title}"
@@ -108,6 +109,10 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textStyle="bold" />
 
+                <!--
+                app:listData="@{viewModel.similarMovies}"
+                -->
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
@@ -115,7 +120,7 @@
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:listData="@{viewModel.similarMovies}"
+
                     tools:listitem="@layout/similar_movie_list_item" />
 
             </LinearLayout>

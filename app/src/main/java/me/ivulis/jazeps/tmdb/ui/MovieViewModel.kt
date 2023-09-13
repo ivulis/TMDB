@@ -1,5 +1,6 @@
 package me.ivulis.jazeps.tmdb.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,8 +22,9 @@ class MovieViewModel : ViewModel() {
         _movies.value = MovieData.getMovieData()
     }
 
-    fun onMovieTapped(movie: Movie) {
+    fun onMovieClicked(movie: Movie) {
+        Log.d("MOVIE", "$movie")
         _movie.value = movie
-        _similarMovies.value = MovieData.getMovieData()
+//        _similarMovies.value = MovieData.getMovieData()
     }
 }

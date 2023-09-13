@@ -8,12 +8,16 @@
         <variable
             name="movie"
             type="me.ivulis.jazeps.tmdb.model.Movie" />
+        <variable
+            name="clickListener"
+            type="me.ivulis.jazeps.tmdb.ui.MovieListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(movie)}"
         android:layout_marginVertical="@dimen/margin_small"
         app:cardCornerRadius="@dimen/radius_small"
         app:cardElevation="@dimen/elevation_medium">
