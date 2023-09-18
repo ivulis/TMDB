@@ -13,6 +13,7 @@ import me.ivulis.jazeps.tmdb.databinding.FragmentMovieListBinding
 class MovieListFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
+
     // Binding object instance with access to the views in the fragment_movie_list.xml layout
     private lateinit var binding: FragmentMovieListBinding
 
@@ -21,13 +22,16 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentMovieListBinding.inflate(inflater)
+        binding = FragmentMovieListBinding.inflate(inflater)
         viewModel.getMovieList()
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.recyclerView.adapter = MovieListAdapter(MovieListener { movie ->
             viewModel.onMovieClicked(movie)
-            findNavController().navigate(R.id.action_movieListFragment_to_movieDetailFragment)
+            findNavController().navigate(
+                R.id.action_movieListFragment_to_movieDetailFragment,
+                MovieDetailFragmentArgs(movie.title).toBundle()
+            )
         })
         return binding.root
     }

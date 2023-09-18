@@ -14,5 +14,10 @@
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
-        android:name="me.ivulis.jazeps.tmdb.ui.MovieDetailFragment" />
+        android:name="me.ivulis.jazeps.tmdb.ui.MovieDetailFragment"
+        android:label="{dynamicTitle}">
+        <argument
+            android:name="dynamicTitle"
+            app:argType="string" />
+    </fragment>
 </navigation>
