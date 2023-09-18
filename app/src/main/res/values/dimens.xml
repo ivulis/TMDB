@@ -20,7 +20,7 @@
 
     <dimen name="similar_movie_poster_width">150dp</dimen>
     <dimen name="similar_movie_poster_height">225dp</dimen>
-    <dimen name="similar_movie_title_lines">2</dimen>
+    <integer name="similar_movie_title_lines">2</integer>
 
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
