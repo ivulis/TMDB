@@ -14,7 +14,6 @@ class MovieListFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
 
-    // Binding object instance with access to the views in the fragment_movie_list.xml layout
     private lateinit var binding: FragmentMovieListBinding
 
     override fun onCreateView(
@@ -26,7 +25,7 @@ class MovieListFragment : Fragment() {
         viewModel.getMovieList()
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter(MovieListener { movie ->
+        binding.recyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
             viewModel.onMovieClicked(movie)
             findNavController().navigate(
                 R.id.action_movieListFragment_to_movieDetailFragment,

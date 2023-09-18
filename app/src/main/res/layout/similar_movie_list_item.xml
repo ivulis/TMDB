@@ -8,12 +8,18 @@
         <variable
             name="movie"
             type="me.ivulis.jazeps.tmdb.model.Movie" />
+
+        <variable
+            name="clickListener"
+            type="me.ivulis.jazeps.tmdb.ui.MovieListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:onClick="@{() -> clickListener.onClick(movie)}"
         app:cardCornerRadius="@dimen/radius_medium"
         app:cardElevation="@dimen/elevation_medium">
 
@@ -23,7 +29,6 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/movie_poster"
                 android:layout_width="@dimen/similar_movie_poster_width"
                 android:layout_height="@dimen/similar_movie_poster_height"
                 android:layout_marginBottom="@dimen/margin_small"
@@ -55,7 +60,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:maxLines="@dimen/similar_movie_title_lines"
+                    android:minLines="@dimen/similar_movie_title_lines"
                     android:text="@{movie.title}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textStyle="bold"

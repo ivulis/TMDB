@@ -4,19 +4,47 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import me.ivulis.jazeps.tmdb.databinding.MovieListItemBinding
+import me.ivulis.jazeps.tmdb.databinding.SimilarMovieListItemBinding
 import me.ivulis.jazeps.tmdb.model.Movie
 
-class MovieListAdapter(private val clickListener: MovieListener) :
-    ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(DiffCallback) {
+class MovieListAdapter(
+    private val horizontal: Boolean = false,
+    private val clickListener: MovieListener
+) :
+    ListAdapter<Movie, ViewHolder>(DiffCallback) {
 
-    class MovieViewHolder(private var binding: MovieListItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class MovieViewHolder(private var binding: MovieListItemBinding) : ViewHolder(binding.root) {
         fun bind(clickListener: MovieListener, movie: Movie) {
             binding.movie = movie
             binding.clickListener = clickListener
             binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): MovieViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = MovieListItemBinding.inflate(layoutInflater, parent, false)
+                return MovieViewHolder(binding)
+            }
+        }
+    }
+
+    class SimilarMovieViewHolder(private var binding: SimilarMovieListItemBinding) :
+        ViewHolder(binding.root) {
+        fun bind(clickListener: MovieListener, movie: Movie) {
+            binding.movie = movie
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): SimilarMovieViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = SimilarMovieListItemBinding.inflate(layoutInflater, parent, false)
+                return SimilarMovieViewHolder(binding)
+            }
         }
     }
 
@@ -33,16 +61,23 @@ class MovieListAdapter(private val clickListener: MovieListener) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return MovieViewHolder(
-            MovieListItemBinding.inflate(layoutInflater, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return if (horizontal) SimilarMovieViewHolder.from(parent)
+        else MovieViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie = getItem(position)
-        holder.bind(clickListener, movie)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (holder) {
+            is MovieViewHolder -> {
+                val movie = getItem(position)
+                holder.bind(clickListener, movie)
+            }
+
+            is SimilarMovieViewHolder -> {
+                val movie = getItem(position)
+                holder.bind(clickListener, movie)
+            }
+        }
     }
 }
 
