@@ -8,6 +8,7 @@
         <variable
             name="movie"
             type="me.ivulis.jazeps.tmdb.model.Movie" />
+
         <variable
             name="clickListener"
             type="me.ivulis.jazeps.tmdb.ui.MovieListener" />
@@ -17,8 +18,8 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onClick(movie)}"
         android:layout_marginVertical="@dimen/margin_small"
+        android:onClick="@{() -> clickListener.onClick(movie)}"
         app:cardCornerRadius="@dimen/radius_small"
         app:cardElevation="@dimen/elevation_medium">
 
@@ -34,7 +35,7 @@
                 android:layout_height="@dimen/poster_height"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{movie.poster}"
+                app:imageUrl='@{"https://image.tmdb.org/t/p/w500"+movie.poster}'
                 app:layout_constraintStart_toStartOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -54,44 +55,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:maxLines="@integer/movie_title_lines"
                     android:text="@{movie.title}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="@dimen/text_size_large"
                     tools:text="The Lord of the Rings: The Fellowship of the Ring" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/movie_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/movie_release_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{movie.releaseDate}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textSize="@dimen/text_size_medium"
-                        tools:text="Jul 21, 2023" />
-
-                    <TextView
-                        android:id="@+id/movie_runtime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_medium"
-                        android:text="@{movie.runtime}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textSize="@dimen/text_size_medium"
-                        tools:text="1h 54m" />
-                </LinearLayout>
+                    android:text="@{movie.releaseDate}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="Jul 21, 2023" />
 
                 <TextView
                     android:id="@+id/movie_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{movie.rating}"
+                    android:drawablePadding="@dimen/padding_small"
+                    android:gravity="center_vertical"
+                    android:text="@{String.valueOf(movie.rating)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="@dimen/text_size_medium"
+                    app:drawableLeftCompat="@drawable/ic_rating"
                     tools:text="7.2" />
             </LinearLayout>
 

@@ -50,12 +50,12 @@ class MovieListAdapter(
 
     companion object DiffCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.title == newItem.title
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.releaseDate == newItem.releaseDate
-                    && oldItem.runtime == newItem.runtime
+            return oldItem.title == newItem.title
+                    && oldItem.releaseDate == newItem.releaseDate
                     && oldItem.rating == newItem.rating
                     && oldItem.poster == newItem.poster
         }

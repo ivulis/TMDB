@@ -21,7 +21,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface MovieApiService {
-    @GET("movie/popular?api_key=6d86068be3d5562159db9c1da4fd14d4")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY
     ): Movies

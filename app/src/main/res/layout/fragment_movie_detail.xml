@@ -42,6 +42,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     tools:text="2001-12-18" />
 
+                <!--
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,6 +50,7 @@
                     android:text="@{viewModel.movie.runtime}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     tools:text="179m" />
+                    -->
 
             </LinearLayout>
 
@@ -63,7 +65,7 @@
                     android:layout_height="@dimen/poster_height"
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{viewModel.movie.poster}"
+                    app:imageUrl='@{"https://image.tmdb.org/t/p/w500"+viewModel.movie.poster}'
                     tools:src="@tools:sample/backgrounds/scenic" />
 
                 <TextView
@@ -108,10 +110,6 @@
                     android:text="@string/similar_movies_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textStyle="bold" />
-
-                <!--
-                app:listData="@{viewModel.similarMovies}"
-                -->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"

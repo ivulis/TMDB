@@ -1,16 +1,19 @@
 package me.ivulis.jazeps.tmdb.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import me.ivulis.jazeps.tmdb.data.MovieData
 import me.ivulis.jazeps.tmdb.model.Movie
 import me.ivulis.jazeps.tmdb.network.MovieApi
 
+enum class MovieApiStatus {LOADING, ERROR, SUCCESS}
+
 class MovieViewModel : ViewModel() {
+
+    private val _status = MutableLiveData<MovieApiStatus>()
+    val status: LiveData<MovieApiStatus> = _status
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
@@ -23,8 +26,14 @@ class MovieViewModel : ViewModel() {
 
     fun getMovieList() {
         viewModelScope.launch {
-            val listResult = MovieApi.retrofitService.getPopularMovies()
-            Log.d("MovieList", "$listResult")
+            _status.value = MovieApiStatus.LOADING
+            try {
+                _movies.value = MovieApi.retrofitService.getPopularMovies().movies
+                _status.value = MovieApiStatus.SUCCESS
+            } catch (e: Exception) {
+                _movies.value = listOf()
+                _status.value = MovieApiStatus.ERROR
+            }
         }
     }
 
@@ -33,7 +42,7 @@ class MovieViewModel : ViewModel() {
         if (_movie.value?.isEmpty() == false) {
             this.movie = _movie.value!!.last()
         }
-        _similarMovies.value = MovieData.getMovieData()
+//        _similarMovies.value = MovieData.getMovieData()
     }
 
     fun onNavigateUp() {
