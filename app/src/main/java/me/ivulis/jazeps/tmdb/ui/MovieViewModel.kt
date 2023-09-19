@@ -1,10 +1,14 @@
 package me.ivulis.jazeps.tmdb.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import me.ivulis.jazeps.tmdb.data.MovieData
 import me.ivulis.jazeps.tmdb.model.Movie
+import me.ivulis.jazeps.tmdb.network.MovieApi
 
 class MovieViewModel : ViewModel() {
 
@@ -18,7 +22,10 @@ class MovieViewModel : ViewModel() {
     val similarMovies: LiveData<List<Movie>> = _similarMovies
 
     fun getMovieList() {
-        _movies.value = MovieData.getMovieData()
+        viewModelScope.launch {
+            val listResult = MovieApi.retrofitService.getPopularMovies()
+            Log.d("MovieList", "$listResult")
+        }
     }
 
     fun onMovieClicked(movie: Movie) {
