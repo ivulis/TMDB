@@ -20,7 +20,7 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMovieListBinding.inflate(inflater)
         viewModel.getMovieList()
         binding.lifecycleOwner = this
