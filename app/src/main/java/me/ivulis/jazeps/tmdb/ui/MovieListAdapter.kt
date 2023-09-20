@@ -17,9 +17,11 @@ class MovieListAdapter(
 
     class MovieViewHolder(private var binding: MovieListItemBinding) : ViewHolder(binding.root) {
         fun bind(clickListener: MovieListener, movie: Movie) {
-            binding.movie = movie
-            binding.clickListener = clickListener
-            binding.executePendingBindings()
+            binding.apply {
+                this.movie = movie
+                this.clickListener = clickListener
+                executePendingBindings()
+            }
         }
 
         companion object {
@@ -34,9 +36,11 @@ class MovieListAdapter(
     class SimilarMovieViewHolder(private var binding: SimilarMovieListItemBinding) :
         ViewHolder(binding.root) {
         fun bind(clickListener: MovieListener, movie: Movie) {
-            binding.movie = movie
-            binding.clickListener = clickListener
-            binding.executePendingBindings()
+            binding.apply {
+                this.movie = movie
+                this.clickListener = clickListener
+                executePendingBindings()
+            }
         }
 
         companion object {
