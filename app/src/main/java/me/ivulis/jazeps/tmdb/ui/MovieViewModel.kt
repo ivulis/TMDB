@@ -1,11 +1,13 @@
 package me.ivulis.jazeps.tmdb.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import me.ivulis.jazeps.tmdb.model.Movie
+import me.ivulis.jazeps.tmdb.model.MovieDetails
 import me.ivulis.jazeps.tmdb.network.MovieApi
 
 enum class MovieApiStatus {LOADING, ERROR, SUCCESS}
@@ -18,8 +20,12 @@ class MovieViewModel : ViewModel() {
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
 
-    private val _movie = MutableLiveData<List<Movie>>()
-    lateinit var movie: Movie
+    private var movieHistory: MutableList<MovieDetails> = mutableListOf()
+
+    private val _movie = MutableLiveData<MovieDetails>()
+    var movie: LiveData<MovieDetails> = _movie
+
+    private var similarMoviesHistory: MutableList<List<Movie>> = mutableListOf()
 
     private val _similarMovies = MutableLiveData<List<Movie>>()
     val similarMovies: LiveData<List<Movie>> = _similarMovies
@@ -38,17 +44,33 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onMovieClicked(movie: Movie) {
-        _movie.value = _movie.value?.plus(movie) ?: listOf(movie)
-        if (_movie.value?.isEmpty() == false) {
-            this.movie = _movie.value!!.last()
+        viewModelScope.launch {
+            try {
+                val currentMovie = MovieApi.retrofitService.getMovieDetails(movie.id.toString())
+                movieHistory.add(currentMovie)
+                _movie.value = currentMovie
+
+                try {
+                    val currentSimilarMovies = MovieApi.retrofitService.getSimilarMovies(movie.id.toString()).movies
+                    similarMoviesHistory.add(currentSimilarMovies)
+                    _similarMovies.value = currentSimilarMovies
+                } catch (e: Exception) {
+                    similarMoviesHistory.add(listOf())
+                    _similarMovies.value = listOf()
+                    Log.d("MOVIEE ERROR", "${e.message}")
+                }
+            } catch (e: Exception) {
+                Log.d("MOVIEE ERROR", "${e.message}")
+            }
+
+
         }
-//        _similarMovies.value = MovieData.getMovieData()
     }
 
     fun onNavigateUp() {
-        _movie.value = _movie.value?.toMutableList()?.apply { removeLast() }?.toList()
-        if (_movie.value?.isEmpty() == false) {
-            this.movie = _movie.value!!.last()
-        }
+        if (movieHistory.isNotEmpty()) movieHistory.removeIf { it.id == movie.value?.id }
+        if (similarMoviesHistory.isNotEmpty()) similarMoviesHistory.removeLast()
+        if (movieHistory.isNotEmpty()) _movie.value = movieHistory.last()
+        if (similarMoviesHistory.isNotEmpty()) _similarMovies.value = similarMoviesHistory.last()
     }
 }
