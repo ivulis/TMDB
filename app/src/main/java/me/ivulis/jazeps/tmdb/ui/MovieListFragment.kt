@@ -14,24 +14,26 @@ class MovieListFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentMovieListBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieListBinding.inflate(inflater)
         viewModel.getMovieList()
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
-            viewModel.onMovieClicked(movie)
-            findNavController().navigate(
-                R.id.action_movieListFragment_to_movieDetailFragment,
-                MovieDetailFragmentArgs(movie.title).toBundle()
-            )
-        })
+
+        val binding = FragmentMovieListBinding.inflate(inflater)
+        binding.apply {
+            lifecycleOwner = this@MovieListFragment
+            viewModel = this@MovieListFragment.viewModel
+            recyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
+                viewModel?.onMovieClicked(movie)
+                findNavController().navigate(
+                    R.id.action_movieListFragment_to_movieDetailFragment,
+                    MovieDetailFragmentArgs(movie.title).toBundle()
+                )
+            })
+        }
+
         return binding.root
     }
 }

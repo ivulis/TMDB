@@ -20,15 +20,17 @@ class MovieDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentMovieDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
-            viewModel.onMovieClicked(movie)
-            findNavController().navigate(
-                R.id.action_movieDetailFragment_self,
-                MovieDetailFragmentArgs(movie.title).toBundle()
-            )
-        })
+        binding.apply {
+            lifecycleOwner = this@MovieDetailFragment
+            viewModel = this@MovieDetailFragment.viewModel
+            recyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
+                viewModel?.onMovieClicked(movie)
+                findNavController().navigate(
+                    R.id.action_movieDetailFragment_self,
+                    MovieDetailFragmentArgs(movie.title).toBundle()
+                )
+            })
+        }
 
         return binding.root
     }
