@@ -14,7 +14,7 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+        android:id="@+id/popular_movie_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onClick(movie)}"

@@ -25,7 +25,7 @@ class MovieListFragment : Fragment() {
         binding.apply {
             lifecycleOwner = this@MovieListFragment
             viewModel = this@MovieListFragment.viewModel
-            recyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
+            popularMoviesRecyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
                 viewModel?.onMovieClicked(movie)
                 findNavController().navigate(
                     R.id.action_movieListFragment_to_movieDetailFragment,

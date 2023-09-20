@@ -23,7 +23,7 @@ class MovieDetailFragment : Fragment() {
         binding.apply {
             lifecycleOwner = this@MovieDetailFragment
             viewModel = this@MovieDetailFragment.viewModel
-            recyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
+            similarMoviesRecyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
                 viewModel?.onMovieClicked(movie)
                 findNavController().navigate(
                     R.id.action_movieDetailFragment_self,
