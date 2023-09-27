@@ -13,7 +13,7 @@ import me.ivulis.jazeps.tmdb.network.MovieApi
 
 class MovieViewModel : ViewModel() {
 
-    var pageNumber = "1"
+    private var pageNumber = "1"
 
     private val _status = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
     val status: StateFlow<MovieApiStatus> = _status
@@ -33,9 +33,6 @@ class MovieViewModel : ViewModel() {
 
     private val _similarMovies = MutableLiveData<List<Movie>>()
     val similarMovies: LiveData<List<Movie>> = _similarMovies
-
-    private val _similarMoviesStatus = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
-    val similarMoviesStatus: StateFlow<MovieApiStatus> = _similarMoviesStatus
 
     fun getMovieList() {
         viewModelScope.launch {
@@ -75,15 +72,12 @@ class MovieViewModel : ViewModel() {
 
     private fun getSimilarMovies(movieId: String) {
         viewModelScope.launch {
-            _similarMoviesStatus.emit(MovieApiStatus.LOADING)
             MovieApi.retrofitService.getSimilarMovies(movieId).onSuccess { response ->
                 similarMoviesHistory.add(response.movies)
                 _similarMovies.value = response.movies
-                _similarMoviesStatus.emit(MovieApiStatus.SUCCESS)
-            }.onFailure { error ->
+            }.onFailure {
                 similarMoviesHistory.add(listOf())
                 _similarMovies.value = listOf()
-                _similarMoviesStatus.emit(MovieApiStatus.ERROR(error.localizedMessage))
             }
         }
     }

@@ -51,19 +51,3 @@ fun bindMovieDetails(movieDetailsView: ScrollView, status: MovieApiStatus?) {
         else -> {}
     }
 }
-
-//@BindingAdapter("similarMoviesView")
-//fun bindSimilarMovies(similarMoviesView: LinearLayout, status: MovieApiStatus?) {
-//    when(status) {
-//        MovieApiStatus.LOADING -> {
-//            similarMoviesView.visibility = View.GONE
-//        }
-//        MovieApiStatus.SUCCESS -> {
-//            similarMoviesView.visibility = View.VISIBLE
-//        }
-//        MovieApiStatus.ERROR -> {
-//            similarMoviesView.visibility = View.GONE
-//        }
-//        else -> {}
-//    }
-//}

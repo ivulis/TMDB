@@ -111,10 +111,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/margin_small" />
 
-                <!--
-                app:similarMoviesView="@{viewModel.similarMoviesStatus}"
-                -->
-
                 <LinearLayout
                     android:id="@+id/similar_movies_view"
                     android:layout_width="match_parent"
