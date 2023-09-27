@@ -20,32 +20,34 @@ class MovieListFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentMovieListBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMovieListBinding.inflate(inflater)
+    ): View {
         viewModel.getMovieList()
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
-            viewModel.onMovieClicked(movie)
-            findNavController().navigate(
-                R.id.action_movieListFragment_to_movieDetailFragment,
-                MovieDetailFragmentArgs(movie.title).toBundle()
-            )
-        })
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
-                    viewModel.getMovieList()
+        
+        val binding = FragmentMovieListBinding.inflate(inflater)
+        binding.apply {
+            lifecycleOwner = this@MovieListFragment
+            viewModel = this@MovieListFragment.viewModel
+            popularMoviesRecyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
+                viewModel?.onMovieClicked(movie)
+                findNavController().navigate(
+                    R.id.action_movieListFragment_to_movieDetailFragment,
+                    MovieDetailFragmentArgs(movie.title).toBundle()
+                )
+            })
+            popularMoviesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                        viewModel.getMovieList()
+                    }
                 }
-            }
-        })
+            })
+        }
+
         return binding.root
     }
 

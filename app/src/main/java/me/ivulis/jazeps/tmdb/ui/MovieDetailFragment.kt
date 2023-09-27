@@ -23,17 +23,19 @@ class MovieDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentMovieDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-        binding.recyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
-            viewModel.onMovieClicked(movie)
-            findNavController().navigate(
-                R.id.action_movieDetailFragment_self,
-                MovieDetailFragmentArgs(movie.title).toBundle()
-            )
-        })
+        binding.apply {
+            lifecycleOwner = this@MovieDetailFragment
+            viewModel = this@MovieDetailFragment.viewModel
+            similarMoviesRecyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
+                viewModel?.onMovieClicked(movie)
+                findNavController().navigate(
+                    R.id.action_movieDetailFragment_self,
+                    MovieDetailFragmentArgs(movie.title).toBundle()
+                )
+            })
+        }
 
         return binding.root
     }
