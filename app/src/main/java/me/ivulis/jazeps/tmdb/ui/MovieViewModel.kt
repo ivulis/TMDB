@@ -1,6 +1,5 @@
 package me.ivulis.jazeps.tmdb.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,8 +13,7 @@ import me.ivulis.jazeps.tmdb.network.MovieApi
 
 class MovieViewModel : ViewModel() {
 
-    private val _movieId = MutableLiveData<String>()
-    val movieId: LiveData<String> = _movieId
+    var pageNumber = "1"
 
     private val _status = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
     val status: StateFlow<MovieApiStatus> = _status
@@ -24,6 +22,9 @@ class MovieViewModel : ViewModel() {
     val movies: LiveData<List<Movie>> = _movies
 
     private var movieHistory: MutableList<MovieDetails> = mutableListOf()
+
+    private val _movieId = MutableLiveData<String>()
+    val movieId: LiveData<String> = _movieId
 
     private val _movie = MutableLiveData<MovieDetails>()
     var movie: LiveData<MovieDetails> = _movie
@@ -38,14 +39,16 @@ class MovieViewModel : ViewModel() {
 
     fun getMovieList() {
         viewModelScope.launch {
-            Log.d("LIST", "LOADING")
             _status.emit(MovieApiStatus.LOADING)
-            MovieApi.retrofitService.getPopularMovies().onSuccess {
-                Log.d("LIST", "SUCCESS")
-                _movies.value = it.movies
+            MovieApi.retrofitService.getPopularMovies(pageNumber).onSuccess {
+                pageNumber = (pageNumber.toInt() + 1).toString()
+                if (_movies.value.isNullOrEmpty()) {
+                    _movies.value = it.movies
+                } else {
+                    _movies.value = _movies.value!!.plus(it.movies)
+                }
                 _status.emit(MovieApiStatus.SUCCESS)
             }.onFailure {
-                Log.d("LIST", "ERROR")
                 _status.emit(MovieApiStatus.ERROR(it.localizedMessage))
             }
         }
