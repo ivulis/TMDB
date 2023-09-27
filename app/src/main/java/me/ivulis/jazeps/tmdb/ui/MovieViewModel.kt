@@ -5,17 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.ivulis.jazeps.tmdb.model.Movie
 import me.ivulis.jazeps.tmdb.model.MovieDetails
 import me.ivulis.jazeps.tmdb.network.MovieApi
 
-enum class MovieApiStatus {LOADING, ERROR, SUCCESS}
-
 class MovieViewModel : ViewModel() {
 
-    private val _status = MutableLiveData<MovieApiStatus>()
-    val status: LiveData<MovieApiStatus> = _status
+    private val _movieId = MutableLiveData<String>()
+    val movieId: LiveData<String> = _movieId
+
+    private val _status = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
+    val status: StateFlow<MovieApiStatus> = _status
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
@@ -30,40 +33,55 @@ class MovieViewModel : ViewModel() {
     private val _similarMovies = MutableLiveData<List<Movie>>()
     val similarMovies: LiveData<List<Movie>> = _similarMovies
 
+    private val _similarMoviesStatus = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
+    val similarMoviesStatus: StateFlow<MovieApiStatus> = _similarMoviesStatus
+
     fun getMovieList() {
         viewModelScope.launch {
-            _status.value = MovieApiStatus.LOADING
-            try {
-                _movies.value = MovieApi.retrofitService.getPopularMovies().movies
-                _status.value = MovieApiStatus.SUCCESS
-            } catch (e: Exception) {
-                _movies.value = listOf()
-                _status.value = MovieApiStatus.ERROR
+            Log.d("LIST", "LOADING")
+            _status.emit(MovieApiStatus.LOADING)
+            MovieApi.retrofitService.getPopularMovies().onSuccess {
+                Log.d("LIST", "SUCCESS")
+                _movies.value = it.movies
+                _status.emit(MovieApiStatus.SUCCESS)
+            }.onFailure {
+                Log.d("LIST", "ERROR")
+                _status.emit(MovieApiStatus.ERROR(it.localizedMessage))
             }
         }
     }
 
     fun onMovieClicked(movie: Movie) {
+        _movieId.value = movie.id.toString()
+        movieId.value?.let { getMovieDetails(it) }
+    }
+
+    fun getMovieDetails(movieId: String) {
         viewModelScope.launch {
-            try {
-                val currentMovie = MovieApi.retrofitService.getMovieDetails(movie.id.toString())
+            _status.emit(MovieApiStatus.LOADING)
+            MovieApi.retrofitService.getMovieDetails(movieId).onSuccess { currentMovie ->
                 movieHistory.add(currentMovie)
                 _movie.value = currentMovie
-
-                try {
-                    val currentSimilarMovies = MovieApi.retrofitService.getSimilarMovies(movie.id.toString()).movies
-                    similarMoviesHistory.add(currentSimilarMovies)
-                    _similarMovies.value = currentSimilarMovies
-                } catch (e: Exception) {
-                    similarMoviesHistory.add(listOf())
-                    _similarMovies.value = listOf()
-                    Log.d("MOVIEE ERROR", "${e.message}")
-                }
-            } catch (e: Exception) {
-                Log.d("MOVIEE ERROR", "${e.message}")
+                _status.emit(MovieApiStatus.SUCCESS)
+                getSimilarMovies(movieId)
+            }.onFailure { error ->
+                _status.emit(MovieApiStatus.ERROR(error.localizedMessage))
             }
+        }
+    }
 
-
+    private fun getSimilarMovies(movieId: String) {
+        viewModelScope.launch {
+            _similarMoviesStatus.emit(MovieApiStatus.LOADING)
+            MovieApi.retrofitService.getSimilarMovies(movieId).onSuccess { response ->
+                similarMoviesHistory.add(response.movies)
+                _similarMovies.value = response.movies
+                _similarMoviesStatus.emit(MovieApiStatus.SUCCESS)
+            }.onFailure { error ->
+                similarMoviesHistory.add(listOf())
+                _similarMovies.value = listOf()
+                _similarMoviesStatus.emit(MovieApiStatus.ERROR(error.localizedMessage))
+            }
         }
     }
 
@@ -73,4 +91,11 @@ class MovieViewModel : ViewModel() {
         if (movieHistory.isNotEmpty()) _movie.value = movieHistory.last()
         if (similarMoviesHistory.isNotEmpty()) _similarMovies.value = similarMoviesHistory.last()
     }
+}
+
+sealed class MovieApiStatus {
+    data object START : MovieApiStatus()
+    data object LOADING : MovieApiStatus()
+    data object SUCCESS : MovieApiStatus()
+    data class ERROR(val message: String?) : MovieApiStatus()
 }

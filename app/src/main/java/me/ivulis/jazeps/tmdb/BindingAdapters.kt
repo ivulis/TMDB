@@ -3,7 +3,7 @@ package me.ivulis.jazeps.tmdb
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.ScrollView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -32,38 +32,38 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-/**
- * Displays the [MovieApiStatus] of the network request in an image view.
- */
 @BindingAdapter("progressBar")
 fun bindProgressBar(statusProgressBar: ProgressBar, status: MovieApiStatus?) {
-    when(status) {
-        MovieApiStatus.LOADING -> {
-            statusProgressBar.visibility = View.VISIBLE
-        }
-        MovieApiStatus.SUCCESS -> {
-            statusProgressBar.visibility = View.GONE
-        }
-        MovieApiStatus.ERROR -> {
-            statusProgressBar.visibility = View.GONE
-        }
+    when (status) {
+        is MovieApiStatus.LOADING -> statusProgressBar.visibility = View.VISIBLE
+        is MovieApiStatus.SUCCESS -> statusProgressBar.visibility = View.GONE
+        is MovieApiStatus.ERROR -> statusProgressBar.visibility = View.GONE
         else -> {}
     }
 }
 
-@BindingAdapter("error")
-fun bindError(errorTextView: TextView, status: MovieApiStatus?) {
-    when(status) {
-        MovieApiStatus.LOADING -> {
-            errorTextView.visibility = View.GONE
-        }
-        MovieApiStatus.SUCCESS -> {
-            errorTextView.visibility = View.GONE
-        }
-        MovieApiStatus.ERROR -> {
-            errorTextView.visibility = View.VISIBLE
-            errorTextView.text = "Something went wrong"
-        }
+@BindingAdapter("movieDetails")
+fun bindMovieDetails(movieDetailsView: ScrollView, status: MovieApiStatus?) {
+    when (status) {
+        is MovieApiStatus.LOADING -> movieDetailsView.visibility = View.GONE
+        is MovieApiStatus.SUCCESS -> movieDetailsView.visibility = View.VISIBLE
+        is MovieApiStatus.ERROR -> movieDetailsView.visibility = View.GONE
         else -> {}
     }
 }
+
+//@BindingAdapter("similarMoviesView")
+//fun bindSimilarMovies(similarMoviesView: LinearLayout, status: MovieApiStatus?) {
+//    when(status) {
+//        MovieApiStatus.LOADING -> {
+//            similarMoviesView.visibility = View.GONE
+//        }
+//        MovieApiStatus.SUCCESS -> {
+//            similarMoviesView.visibility = View.VISIBLE
+//        }
+//        MovieApiStatus.ERROR -> {
+//            similarMoviesView.visibility = View.GONE
+//        }
+//        else -> {}
+//    }
+//}

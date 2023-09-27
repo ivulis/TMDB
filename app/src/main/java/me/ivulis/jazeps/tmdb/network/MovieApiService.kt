@@ -18,27 +18,28 @@ private val moshi = Moshi.Builder()
     .build()
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .addCallAdapterFactory(ResultCallAdapterFactory())
     .build()
 
 interface MovieApiService {
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY
-    ): Movies
+    ): Result<Movies>
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path(value = "movie_id") movieId: String,
         @Query("api_key") apiKey: String = API_KEY
-    ): MovieDetails
+    ): Result<MovieDetails>
 
     @GET("movie/{movie_id}/similar")
     suspend fun getSimilarMovies(
         @Path(value = "movie_id") movieId: String,
         @Query("api_key") apiKey: String = API_KEY
-    ): Movies
+    ): Result<Movies>
 }
 
 object MovieApi {
