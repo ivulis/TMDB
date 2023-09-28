@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.ivulis.jazeps.tmdb.model.Movie
-import me.ivulis.jazeps.tmdb.model.MovieDetails
 import me.ivulis.jazeps.tmdb.network.MovieApi
 
 class MovieViewModel : ViewModel() {
@@ -21,13 +20,13 @@ class MovieViewModel : ViewModel() {
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
 
-    private var movieHistory: MutableList<MovieDetails> = mutableListOf()
+    private var movieHistory: MutableList<Movie> = mutableListOf()
 
     private val _movieId = MutableLiveData<String>()
     val movieId: LiveData<String> = _movieId
 
-    private val _movie = MutableLiveData<MovieDetails>()
-    var movie: LiveData<MovieDetails> = _movie
+    private val _movie = MutableLiveData<Movie>()
+    var movie: LiveData<Movie> = _movie
 
     private var similarMoviesHistory: MutableList<List<Movie>> = mutableListOf()
 
@@ -52,7 +51,7 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onMovieClicked(movie: Movie) {
-        _movieId.value = movie.id.toString()
+        _movieId.value = movie.id
         movieId.value?.let { getMovieDetails(it) }
     }
 

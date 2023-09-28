@@ -31,13 +31,5 @@
             app:listData="@{viewModel.movies}"
             tools:listitem="@layout/movie_list_item" />
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:gravity="center"-->
-<!--            android:textAppearance="@style/TextAppearance.AppCompat.Headline"-->
-<!--            app:error="@{viewModel.status}" />-->
-
     </FrameLayout>
 </layout>

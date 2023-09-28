@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/poster_height"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                app:imageUrl='@{"https://image.tmdb.org/t/p/w500"+movie.poster}'
+                app:imageUrl='@{movie.poster}'
                 app:layout_constraintStart_toStartOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/padding_small"
                     android:gravity="center_vertical"
-                    android:text="@{String.valueOf(movie.rating)}"
+                    android:text="@{movie.rating}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="@dimen/text_size_medium"
                     app:drawableLeftCompat="@drawable/ic_rating"

@@ -34,7 +34,7 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                app:imageUrl='@{"https://image.tmdb.org/t/p/w500"+movie.poster}'
+                app:imageUrl='@{movie.poster}'
                 tools:src="@tools:sample/backgrounds/scenic" />
 
             <LinearLayout
@@ -49,7 +49,7 @@
                     android:layout_marginBottom="@dimen/margin_small"
                     android:drawablePadding="@dimen/padding_small"
                     android:gravity="center_vertical"
-                    android:text="@{String.valueOf(movie.rating)}"
+                    android:text="@{movie.rating}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textStyle="bold"
                     app:drawableLeftCompat="@drawable/ic_rating"
