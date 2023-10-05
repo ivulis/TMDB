@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import me.ivulis.jazeps.tmdb.R
-import me.ivulis.jazeps.tmdb.databinding.FragmentMovieListBinding
+import me.ivulis.jazeps.tmdb.databinding.FragmentMovieDetailBinding
 
-class MovieListFragment : Fragment() {
+class MovieDetailFragment : Fragment() {
 
     private val viewModel: MovieViewModel by activityViewModels()
 
@@ -19,16 +19,14 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.getMovieList()
-
-        val binding = FragmentMovieListBinding.inflate(inflater)
+        val binding = FragmentMovieDetailBinding.inflate(inflater)
         binding.apply {
-            lifecycleOwner = this@MovieListFragment
-            viewModel = this@MovieListFragment.viewModel
-            popularMoviesRecyclerView.adapter = MovieListAdapter(horizontal = false, MovieListener { movie ->
+            lifecycleOwner = this@MovieDetailFragment
+            viewModel = this@MovieDetailFragment.viewModel
+            similarMoviesRecyclerView.adapter = MovieListAdapter(horizontal = true, MovieListener { movie ->
                 viewModel?.onMovieClicked(movie)
                 findNavController().navigate(
-                    R.id.action_movieListFragment_to_movieDetailFragment,
+                    R.id.action_movieDetailFragment_self,
                     MovieDetailFragmentArgs(movie.title).toBundle()
                 )
             })

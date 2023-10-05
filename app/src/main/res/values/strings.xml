@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TMDB</string>
     <string name="add_to_watchlist_button">Add to watchlist button</string>
+    <string name="add_to_watchlist">Add to Watchlist</string>
+    <string name="similar_movies_title">YOU MIGHT ALSO LIKE</string>
+    <string name="trending_movies">Trending movies</string>
+    <string name="watch_trailer">Watch Trailer</string>
 </resources>
