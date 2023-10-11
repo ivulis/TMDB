@@ -12,7 +12,7 @@ import me.ivulis.jazeps.tmdb.network.MovieApi
 
 class MovieViewModel : ViewModel() {
 
-    private var pageNumber = "1"
+    private var pageNumber = 1
     private var searchPageNumber = 1
 
     private val _status = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
@@ -45,8 +45,8 @@ class MovieViewModel : ViewModel() {
     fun getMovieList() {
         viewModelScope.launch {
             _status.emit(MovieApiStatus.LOADING)
-            MovieApi.retrofitService.getPopularMovies(pageNumber).onSuccess {
-                pageNumber = (pageNumber.toInt() + 1).toString()
+            MovieApi.retrofitService.getPopularMovies(pageNumber.toString()).onSuccess {
+                pageNumber += 1
                 if (_movies.value.isNullOrEmpty()) {
                     _movies.value = it.movies
                 } else {
