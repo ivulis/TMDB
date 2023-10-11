@@ -2,10 +2,11 @@
     <string name="app_name">TMDB</string>
     <string name="add_to_watchlist_button">Add to watchlist button</string>
     <string name="add_to_watchlist">Add to Watchlist</string>
-    <string name="similar_movies_title">YOU MIGHT ALSO LIKE</string>
-    <string name="trending_movies">Trending movies</string>
-    <string name="watch_trailer">Watch Trailer</string>
     <string name="error_alert_dialog_negative_button_text">Exit app</string>
     <string name="error_alert_dialog_positive_button_text">Try again</string>
     <string name="error_alert_dialog_title">Error</string>
+    <string name="search_movies">Search movies</string>
+    <string name="similar_movies_title">YOU MIGHT ALSO LIKE</string>
+    <string name="trending_movies">Trending movies</string>
+    <string name="watch_trailer">Watch Trailer</string>
 </resources>
