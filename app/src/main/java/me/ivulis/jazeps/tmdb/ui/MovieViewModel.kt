@@ -13,6 +13,7 @@ import me.ivulis.jazeps.tmdb.network.MovieApi
 class MovieViewModel : ViewModel() {
 
     private var pageNumber = 1
+    private var searchPageNumber = 1
 
     private val _status = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
     val status: StateFlow<MovieApiStatus> = _status
@@ -32,6 +33,14 @@ class MovieViewModel : ViewModel() {
 
     private val _similarMovies = MutableLiveData<List<Movie>>()
     val similarMovies: LiveData<List<Movie>> = _similarMovies
+
+    var searchKeyword: String = ""
+
+    private val _searchStatus = MutableStateFlow<MovieApiStatus>(MovieApiStatus.START)
+    val searchStatus: StateFlow<MovieApiStatus> = _searchStatus
+
+    private val _searchedMovies = MutableLiveData<List<Movie>>()
+    val searchedMovies: LiveData<List<Movie>> = _searchedMovies
 
     fun getMovieList() {
         viewModelScope.launch {
@@ -79,6 +88,44 @@ class MovieViewModel : ViewModel() {
                 _similarMovies.value = listOf()
             }
         }
+    }
+
+    fun getSearchedMoviesList() {
+        searchPageNumber = 1
+        viewModelScope.launch {
+            _searchStatus.emit(MovieApiStatus.LOADING)
+            MovieApi.retrofitService.getSearchedMovies(
+                this@MovieViewModel.searchKeyword,
+                searchPageNumber.toString()
+            ).onSuccess {
+                searchPageNumber = 2
+                _searchedMovies.value = it.movies
+                _searchStatus.emit(MovieApiStatus.SUCCESS)
+            }.onFailure {
+                _searchStatus.emit(MovieApiStatus.ERROR(it.localizedMessage))
+            }
+        }
+    }
+
+    fun getMoreSearchedMoviesList() {
+        viewModelScope.launch {
+            _searchStatus.emit(MovieApiStatus.LOADING)
+            MovieApi.retrofitService.getSearchedMovies(
+                this@MovieViewModel.searchKeyword,
+                searchPageNumber.toString()
+            ).onSuccess {
+                searchPageNumber += 1
+                _searchedMovies.value = _searchedMovies.value!!.plus(it.movies)
+                _searchStatus.emit(MovieApiStatus.SUCCESS)
+            }.onFailure {
+                _searchStatus.emit(MovieApiStatus.ERROR(it.localizedMessage))
+            }
+        }
+    }
+
+    fun resetSearch() {
+        _searchedMovies.value = listOf()
+        searchPageNumber = 1
     }
 
     fun onNavigateUp() {

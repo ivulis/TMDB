@@ -39,8 +39,11 @@ class MovieAdapter {
             id = movieJson.id.toString(),
             description = movieJson.description,
             poster = "https://image.tmdb.org/t/p/w500${movieJson.poster}",
-            releaseDate = LocalDate.parse(movieJson.releaseDate)
-                .format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")),
+                releaseDate = when (movieJson.releaseDate) {
+                    "" -> movieJson.releaseDate
+                    else -> LocalDate.parse(movieJson.releaseDate)
+                        .format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"))
+                },
             runtime = "${(movieJson.runtime?.div(60))}h ${movieJson.runtime?.rem(60)}m",
             title = movieJson.title,
             rating = String.format("%.1f", movieJson.rating)
